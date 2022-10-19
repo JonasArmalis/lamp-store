@@ -1,16 +1,18 @@
 import Stripe from "stripe";
+import { shippingCountries } from "../../lib/utils";
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
-    console.log(req.body);
-
     try {
       const params = {
         submit_type: "pay",
         mode: "payment",
         payment_method_types: ["card"],
-        billing_address_collection: "auto",
+        shipping_address_collection: {
+          allowed_countries: shippingCountries,
+        },
         shipping_options: [
           { shipping_rate: "shr_1LsWZiD0zaMxHi3tHV65Hwso" },
           { shipping_rate: "shr_1LuFnXD0zaMxHi3tW2PGqHg1" },
